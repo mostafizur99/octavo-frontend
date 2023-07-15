@@ -10,7 +10,8 @@ export default {
         center: true,
       },
       colors: {
-        themePrimary: "#4F46E5",
+        // themePrimary: "#4F46E5",
+        themePrimary: "#ff5722",
         themeSecondary: "#52525b",
         themeLighterAlt: "#f7f8fa",
         themeLighter: "#B8B9BB",

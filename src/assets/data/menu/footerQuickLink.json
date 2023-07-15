@@ -1,0 +1,22 @@
+[
+  {
+    "name": "About Us",
+    "link": "/about-us"
+  },
+  {
+    "name": "Contact Us",
+    "link": "/contact-us"
+  },
+  {
+    "name": "Privacy Policy",
+    "link": "/privacy-policy"
+  },
+  {
+    "name": "Terms of Use",
+    "link": "/terms-of-use"
+  },
+  {
+    "name": "FAQ",
+    "link": "/faq"
+  }
+]
