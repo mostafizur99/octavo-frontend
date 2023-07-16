@@ -1,37 +1,24 @@
-import {
-  decrement,
-  increment,
-} from "../../../redux/features/counter/counterSlice";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import BookData from "../../../assets/data/books/allBooks.json";
+import BookCard from "../../../components/ui/cards/BookCard";
 
 const Home = () => {
-  const { count } = useAppSelector((state) => state.counter);
-  const dispatch = useAppDispatch();
-
   return (
-    <>
-      <h2 className="text-cyan-500">Hello Binden (home)</h2>
-
-      <div>
-        <span>{count}</span>
-        <div>
-          <button
-            className="p-2"
-            aria-label="Increment value"
-            onClick={() => dispatch(increment())}
-          >
-            Increment
-          </button>
-          <button
-            className="p-2"
-            aria-label="Decrement value"
-            onClick={() => dispatch(decrement())}
-          >
-            Decrement
-          </button>
-        </div>
+    <div className="container mx-auto pt-14 pb-20 px-5 md:px-0">
+      <div className="text-center mb-14">
+        <p className="text-themePrimary font-bold text-xs leading-none mb-1">
+          Recent Books
+        </p>
+        <h2 className="text-xl font-bold text-black">Find Your Octova</h2>
       </div>
-    </>
+
+      <div className="grid gap-6 xl:gap-8 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+        {BookData.map((item, index) => (
+          <div key={index}>
+            <BookCard data={item} />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 

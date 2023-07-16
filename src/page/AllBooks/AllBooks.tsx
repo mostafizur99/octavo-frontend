@@ -3,7 +3,7 @@ import BookData from "../../assets/data/books/allBooks.json";
 
 const AllBooks = () => {
   return (
-    <div className="container mx-auto py-14">
+    <div className="container mx-auto py-14 px-5 md:px-0">
       <div className="text-center mb-14">
         <p className="text-themePrimary font-bold text-xs leading-none mb-1">
           All Books
