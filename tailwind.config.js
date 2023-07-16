@@ -17,6 +17,7 @@ export default {
         themeLighter: "#B8B9BB",
         themeLight: "#6B7280",
         themeDarker: "#2d3748",
+        themeGrayLight: "#8F9CA9",
         body: "#f2f5f8",
       },
       fontSize: {

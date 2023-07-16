@@ -4,6 +4,10 @@
     "link": "/"
   },
   {
+    "name": "All Books",
+    "link": "/books"
+  },
+  {
     "name": "Lgin",
     "link": "/login"
   },
