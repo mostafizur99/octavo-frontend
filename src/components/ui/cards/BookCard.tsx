@@ -21,7 +21,7 @@ const BookCard = ({ data }: BookCardProps) => {
           </span>
         </span>
       )}
-      <div className="text-center !pt-5 pb-6">
+      <div className="text-center pt-8 pb-6">
         <div className="flex justify-center mb-4">
           <div className="h-10 w-10">
             <img className="h-full w-full rounded-lg" src={logoImg} alt="img" />

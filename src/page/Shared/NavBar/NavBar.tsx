@@ -7,17 +7,11 @@ import loginMenu from "../../../assets/data/menu/loginMenu.json";
 import userAvatar from "../../../assets/images/avatar.jpg";
 import ProfileMenu from "./ProfileMenu";
 import MobileMenu from "./MobileMenu";
+import { useAppSelector } from "../../../redux/hooks";
 
 const NavBar = () => {
-  const userData = null;
-  // const userData = {
-  //   avatar: userAvatar,
-  //   email: "test@email.com",
-  //   fullName: {
-  //     firstName: "John",
-  //     lastName: "Devid",
-  //   },
-  // };
+  const { user: userData } = useAppSelector((state) => state.user);
+  console.log("user a nav =>", userData);
   const location = useLocation();
   const path = location.pathname;
 
@@ -62,6 +56,36 @@ const NavBar = () => {
                     </Link>
                   </li>
                 ))}
+                {!userData && (
+                  <li className="ml-6 xl:ml-0 xl:mb-0">
+                    <Link to={"/login"}>
+                      <p
+                        className={`${
+                          path === "/login"
+                            ? "text-themePrimary"
+                            : "text-arsenic"
+                        } text-xs  font-medium transition-all hover:text-themePrimary`}
+                      >
+                        Login
+                      </p>
+                    </Link>
+                  </li>
+                )}
+                {!userData && (
+                  <li className="ml-6 xl:ml-0 xl:mb-0">
+                    <Link to={"/signup"}>
+                      <p
+                        className={`${
+                          path === "/signup"
+                            ? "text-themePrimary"
+                            : "text-arsenic"
+                        } text-xs  font-medium transition-all hover:text-themePrimary`}
+                      >
+                        Signup
+                      </p>
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
             <div>
@@ -76,8 +100,16 @@ const NavBar = () => {
                         onClick={UserMenuHandler}
                       >
                         <div className="mr-3 flex items-center">
-                          {userData?.avatar && (
-                            <div className="h-10 w-10">
+                          {userData.avatar ? (
+                            <div className="h-8 w-8">
+                              <img
+                                className="h-full w-full rounded-full object-cover"
+                                src={userData?.avatar}
+                                alt="User image"
+                              />
+                            </div>
+                          ) : (
+                            <div className="h-8 w-8">
                               <img
                                 className="h-full w-full rounded-full object-cover"
                                 src={userAvatar}
@@ -88,7 +120,7 @@ const NavBar = () => {
                         </div>
                         <div>
                           <p className="text-sm leading-8">
-                            {userData?.fullName?.firstName}
+                            {userData?.name?.firstName}
                           </p>
                         </div>
                         <span
@@ -100,7 +132,11 @@ const NavBar = () => {
                         </span>
                       </button>
                       {/* <ProfileMenu active={UserMenu} /> */}
-                      <ProfileMenu active={UserMenu} loginMenu={loginMenu} />
+                      <ProfileMenu
+                        active={UserMenu}
+                        loginMenu={loginMenu}
+                        userData={userData}
+                      />
                     </div>
                     <button
                       className="mobile-toogle flex lg:hidden p-2 rounded-full transition-all outline-none"
@@ -165,42 +201,3 @@ const NavBar = () => {
 };
 
 export default NavBar;
-
-//drop-down menu by clicking on user image
-// export const ProfileMenu = ({ active }: { active: boolean }) => {
-//   const userData = true;
-//   return (
-//     <>
-//       <div
-//         className={`top-[calc(130%-8px)] absolute w-[200px] rounded-[5px] p-0 -right-[15px] text-left transition-all duration-300 ease-in-out z-[999] shadow-[0px_0_8px_0px_rgb(0_0_0_/_10%)] before:content-[''] before:absolute before:right-[43px] before:-top-[6px] before:w-0 before:h-0 before:border-l-transparent before:border-r-transparent before:border-b-[rgb(247_248_250)] before:transition-all before:ease-in-out before:duration-300   ${
-//           active
-//             ? "transform scale-100 visible opacity-100"
-//             : "opacity-0 invisible transform scale-[0.95]"
-//         } bg-themeLighterAlt text-white`}
-//       >
-//         <div className="p-3">
-//           <ul>
-//             {userData && (
-//               <>
-//                 {loginMenu.map((item, index) => (
-//                   <li key={index}>
-//                     <Link to={item.link}>
-//                       <a className="block rounded w-full duration-300 ease-in-out py-2 text-base text-themeDarker hover:text-themePrimary">
-//                         {item.name}
-//                       </a>
-//                     </Link>
-//                   </li>
-//                 ))}
-//               </>
-//             )}
-//             <li>
-//               <button className="block text-left rounded w-full duration-300 ease-in-out py-2 text-base text-themeDarker hover:text-red-400">
-//                 Log Out
-//               </button>
-//             </li>
-//           </ul>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };

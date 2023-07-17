@@ -1,7 +1,18 @@
+import { useEffect } from "react";
 import BookData from "../../../assets/data/books/allBooks.json";
 import BookCard from "../../../components/ui/cards/BookCard";
+import { useAppDispatch } from "../../../redux/hooks";
+import { fetchUserByToken } from "../../../redux/features/user/userSlice";
 
 const Home = () => {
+  const dispatch = useAppDispatch();
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchUserByToken());
+    }
+  }, [dispatch, token]);
+
   return (
     <div className="container mx-auto pt-14 pb-20 px-5 md:px-0">
       <div className="text-center mb-14">

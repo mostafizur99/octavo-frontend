@@ -6,13 +6,5 @@
   {
     "name": "All Books",
     "link": "/books"
-  },
-  {
-    "name": "Login",
-    "link": "/login"
-  },
-  {
-    "name": "Signup",
-    "link": "/signup"
   }
 ]

@@ -1,15 +1,25 @@
 import { Link } from "react-router-dom";
+import { IUser } from "../../../types/user";
+import { useAppDispatch } from "../../../redux/hooks";
+import { setUser } from "../../../redux/features/user/userSlice";
+import { removeToken } from "../../../utils/userAuth";
 
 type ProfileMenuProps = {
   active: boolean;
+  userData: IUser;
   loginMenu: {
     name: string;
     link: string;
   }[];
 };
 
-const ProfileMenu = ({ active, loginMenu }: ProfileMenuProps) => {
-  const userData = true;
+const ProfileMenu = ({ active, loginMenu, userData }: ProfileMenuProps) => {
+  const dispatch = useAppDispatch();
+
+  const logOutHandler = () => {
+    removeToken();
+    dispatch(setUser(null));
+  };
   return (
     <>
       <div
@@ -35,7 +45,10 @@ const ProfileMenu = ({ active, loginMenu }: ProfileMenuProps) => {
               </>
             )}
             <li>
-              <button className="block text-left rounded w-full duration-300 ease-in-out py-2 text-base text-themeDarker hover:text-red-400">
+              <button
+                className="block text-left rounded w-full duration-300 ease-in-out py-2 text-base text-themeDarker hover:text-red-400"
+                onClick={logOutHandler}
+              >
                 Log Out
               </button>
             </li>

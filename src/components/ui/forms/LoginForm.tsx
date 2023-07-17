@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUserAtDb, storeToken } from "../../../utils/userAuth";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
+import { useAppSelector } from "../../../redux/hooks";
 
 type Inputs = {
   email: string;
@@ -9,6 +13,17 @@ type Inputs = {
 };
 
 const LoginForm = () => {
+  const { user, isLoading } = useAppSelector((state) => state.user);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && user.email && !isLoading) {
+      navigate("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, isLoading]);
+
   const {
     register,
     handleSubmit,
@@ -17,12 +32,29 @@ const LoginForm = () => {
   } = useForm<Inputs>();
 
   const onSubmitHandler: SubmitHandler<Inputs> = async (data) => {
-    console.log("data", data);
+    try {
+      const loginData = await loginUserAtDb({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (!loginData?.data?.accessToken) {
+        toast.error("Something went wrong during signing in");
+        return;
+      }
+      storeToken(loginData.data.accessToken);
+      toast.success("User logged in successfully");
+      navigate("/");
+      reset();
+    } catch (error) {
+      toast.error("Server Error");
+    }
   };
 
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmitHandler)}>
+        {/* email  */}
         <div className="mb-6">
           <label
             className="block mb-2 text-themeDarker font-normal"
@@ -45,6 +77,7 @@ const LoginForm = () => {
             </span>
           )}
         </div>
+        {/* password  */}
         <div className="mb-4">
           <label
             className="block mb-2 text-themeDarker font-normal"
@@ -75,17 +108,9 @@ const LoginForm = () => {
           disabled={isSubmitting}
         >
           {isSubmitting ? "Please wait..." : "Login"}
-          {isSubmitting && (
-            <div
-              className="spinner-grow w-5 h-5 text-themePrimary"
-              role="status"
-            >
-              <span className="sr-only">Loading...</span>
-            </div>
-          )}
         </button>
         <p className="text-center flex flex-wrap items-center justify-center gap-3">
-          <span className="text-sm text-deep font-normal">New User?</span>
+          <span className="text-sm text-themeLight font-normal">New User?</span>
           <Link
             to="/signup"
             className="inline-block text-sm font-normal text-themePrimary hover:text-themeLighter hover:underline"
