@@ -6,7 +6,10 @@ import { useGetBooksQuery } from "../../redux/features/book/bookApi";
 import { IBook } from "../../types/book";
 
 const AllBooks = () => {
-  const { data, isLoading } = useGetBooksQuery(undefined);
+  const { data, isLoading } = useGetBooksQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+    pollingInterval: 30000,
+  });
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const BookData: IBook[] = data?.data || [];
 

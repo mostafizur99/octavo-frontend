@@ -54,7 +54,7 @@ const BookCard = ({ data }: BookCardProps) => {
           </li>
         </ul>
         <div>
-          <Link to={"#"}>
+          <Link to={data?._id ? `/book/${data?._id}` : "#"}>
             <p className="leading-4 text-themeDarker text-xs group-hover:text-white text-center py-3 px-6 bg-light rounded-md transition-all bg-themeLighter group-hover:!bg-themePrimary">
               View Details
             </p>
