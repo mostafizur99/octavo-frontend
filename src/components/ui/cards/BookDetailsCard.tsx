@@ -7,7 +7,7 @@ import { RiPriceTag3Line, RiTimeLine } from "react-icons/ri";
 import Swal from "sweetalert2";
 import { useDeleteBookMutation } from "../../../redux/features/book/bookApi";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getToken } from "../../../utils/userAuth";
 import BookReviews from "../reviews/BookReviews";
 import { useAppSelector } from "../../../redux/hooks";
@@ -67,9 +67,12 @@ const BookDetailsCard = ({ data }: BookCardProps) => {
           </span>
         </span>
       )}
-      <button className=" right-3 top-3 py-1 px-8 text-white bg-themeDarker rounded-sm text-xss1 absolute flex flex-wrap gap-2">
+      <Link
+        to={`/edit-book/${data?._id}`}
+        className=" right-3 top-3 py-1 px-8 text-white bg-themeDarker rounded-sm text-xss1 absolute flex flex-wrap gap-2"
+      >
         Edit
-      </button>
+      </Link>
       <button
         onClick={() => {
           void deleteHandler(data?._id);
