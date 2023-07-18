@@ -102,7 +102,7 @@ const MobileMenu = ({
                       path === item.link
                         ? "text-themePrimary !border-themePrimary"
                         : "text-themeLighter"
-                    } text-xxs py-3.5 px-4 border-b border-deep w-full transition-all hover:text-themePrimary hover:!border-themePrimary`}
+                    } text-xxs py-3.5 px-4 border-b border-themeLight w-full transition-all hover:text-themePrimary hover:!border-themePrimary`}
                   >
                     {item.name}
                   </p>
@@ -120,7 +120,7 @@ const MobileMenu = ({
                       path === "/login"
                         ? "text-themePrimary !border-themePrimary"
                         : "text-themeLighter"
-                    } text-xxs py-3.5 px-4 border-b border-deep w-full transition-all hover:text-themePrimary hover:!border-themePrimary`}
+                    } text-xxs py-3.5 px-4 border-b border-themeLight w-full transition-all hover:text-themePrimary hover:!border-themePrimary`}
                   >
                     Login
                   </p>
@@ -138,7 +138,7 @@ const MobileMenu = ({
                       path === "/signup"
                         ? "text-themePrimary !border-themePrimary"
                         : "text-themeLighter"
-                    } text-xxs py-3.5 px-4 border-b border-deep w-full transition-all hover:text-themePrimary hover:!border-themePrimary`}
+                    } text-xxs py-3.5 px-4 border-b border-themeLight w-full transition-all hover:text-themePrimary hover:!border-themePrimary`}
                   >
                     Signup
                   </p>

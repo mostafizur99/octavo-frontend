@@ -37,26 +37,25 @@ const BookCard = ({ data }: BookCardProps) => {
       </div>
       <div className="px-2">
         <ul className="mb-4">
-          {/* Vacancy hidden */}
           <li className="mb-2">
-            <p className="flex gap-2 items-center text-deep text-xss1 font-normal">
+            <p className="flex gap-2 items-center text-themeSecondary text-xss1 font-normal">
               <TbCategory2 /> {data?.genre}
             </p>
           </li>
           <li className="mb-2">
-            <div className="flex gap-2 items-center text-deep text-xss1 font-normal">
+            <div className="flex gap-2 items-center text-themeSecondary text-xss1 font-normal">
               <RiPriceTag3Line /> {data?.price}
             </div>
           </li>
           <li className="mb-0">
-            <div className="flex gap-2 items-center text-deep text-xss1 font-normal">
+            <div className="flex gap-2 items-center text-themeSecondary text-xss1 font-normal">
               <RiTimeLine /> {data?.publicationYear}
             </div>
           </li>
         </ul>
         <div>
           <Link to={"#"}>
-            <p className="leading-4 text-deep text-xs group-hover:text-white text-center py-3 px-6 bg-light rounded-md transition-all bg-themeLighter group-hover:!bg-themePrimary">
+            <p className="leading-4 text-themeDarker text-xs group-hover:text-white text-center py-3 px-6 bg-light rounded-md transition-all bg-themeLighter group-hover:!bg-themePrimary">
               View Details
             </p>
           </Link>
