@@ -86,6 +86,21 @@ const NavBar = () => {
                     </Link>
                   </li>
                 )}
+                {userData && (
+                  <li className="ml-6 xl:ml-0 xl:mb-0">
+                    <Link to={"/add-new-book"}>
+                      <p
+                        className={`${
+                          path === "/add-new-book"
+                            ? "text-themePrimary"
+                            : "text-arsenic"
+                        } text-xs  font-medium transition-all hover:text-themePrimary`}
+                      >
+                        Add New Book
+                      </p>
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
             <div>

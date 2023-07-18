@@ -50,7 +50,7 @@ const BookCard = ({ data }: BookCardProps) => {
           </li>
           <li className="mb-0">
             <div className="flex gap-2 items-center text-deep text-xss1 font-normal">
-              <RiTimeLine /> {data?.publicationDate}
+              <RiTimeLine /> {data?.publicationYear}
             </div>
           </li>
         </ul>

@@ -2,7 +2,7 @@ export interface IBook {
   title: string;
   author: string;
   genre: string;
-  publicationDate: string;
+  publicationYear: string;
   price: string;
   isFeatured: boolean;
 }

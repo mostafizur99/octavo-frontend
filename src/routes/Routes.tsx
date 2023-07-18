@@ -5,6 +5,8 @@ import NotFound from "../page/NotFound/NotFound";
 import MainLayout from "../layouts/MainLayout";
 import SignUp from "../page/SignUp/SignUp";
 import AllBooks from "../page/AllBooks/AllBooks";
+import AddNewBook from "../page/AddNewBook/AddNewBook";
+import PrivateRoute from "./PrivateRoute";
 
 const routers = createBrowserRouter([
   {
@@ -25,7 +27,15 @@ const routers = createBrowserRouter([
       },
       {
         path: "signup",
-        element: <SignUp></SignUp>,
+        element: <SignUp />,
+      },
+      {
+        path: "add-new-book",
+        element: (
+          <PrivateRoute>
+            <AddNewBook />
+          </PrivateRoute>
+        ),
       },
       {
         path: "*",
