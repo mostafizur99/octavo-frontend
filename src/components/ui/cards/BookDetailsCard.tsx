@@ -1,17 +1,33 @@
+/* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import logoImg from "../../../assets/images/logo/logo-main.png";
 import { IBook } from "../../../types/book";
 import { TfiUser } from "react-icons/tfi";
 import { TbCategory2 } from "react-icons/tb";
 import { RiPriceTag3Line, RiTimeLine } from "react-icons/ri";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { TiTick, TiTickOutline } from "react-icons/ti";
+import {
+  AiFillHeart,
+  AiOutlineHeart,
+  AiFillRead,
+  AiOutlineRead,
+} from "react-icons/ai";
 import Swal from "sweetalert2";
-import { useDeleteBookMutation } from "../../../redux/features/book/bookApi";
+import {
+  useCreateReadListMutation,
+  useCreateWishListMutation,
+  useDeleteBookMutation,
+  useRemoveReadListMutation,
+  useRemoveWishListMutation,
+  useUpdateReadListMutation,
+} from "../../../redux/features/book/bookApi";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { getToken } from "../../../utils/userAuth";
 import BookReviews from "../reviews/BookReviews";
 import { useAppSelector } from "../../../redux/hooks";
+import { useRetrieveUserQuery } from "../../../redux/features/user/userApi";
+import { IUser } from "../../../types/user";
 
 type BookCardProps = {
   data: IBook;
@@ -19,12 +35,29 @@ type BookCardProps = {
 
 const BookDetailsCard = ({ data }: BookCardProps) => {
   const { user } = useAppSelector((state) => state.user);
-  const listed = false;
 
   const navigate = useNavigate();
   const [deleteBook] = useDeleteBookMutation();
+  const [createWishList] = useCreateWishListMutation();
+  const [removeWishList] = useRemoveWishListMutation();
+
+  const [createReadList] = useCreateReadListMutation();
+  const [removeReadList] = useRemoveReadListMutation();
+  const [updateReadList] = useUpdateReadListMutation();
 
   const token = getToken();
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const { data: userData } = useRetrieveUserQuery({ token });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+  const userDataTotal: IUser = userData?.data;
+  const readListData = userDataTotal?.readList;
+  const wishlistData = userDataTotal?.wishlist;
+
+  const readListSelected =
+    readListData && data && readListData.find((item) => item.book == data._id);
+  const wishlistSelected =
+    wishlistData && data && wishlistData.find((item) => item.book == data._id);
 
   const deleteHandler = async (ID: string) => {
     try {
@@ -58,6 +91,121 @@ const BookDetailsCard = ({ data }: BookCardProps) => {
     }
   };
 
+  const createWishListHandler = async (ID: string) => {
+    try {
+      if (!user?.email) {
+        toast.error("Need to Login to Create a Book");
+        return;
+      }
+      const bookData = {
+        book: ID,
+      };
+
+      createWishList({ token: token, data: bookData })
+        .unwrap()
+        .then(() => {
+          toast.success("Book listed successfully");
+        })
+        .catch((error: { data: { message?: string } }) => {
+          toast.error(error.data.message || "Server Error");
+        });
+    } catch (error) {
+      toast.error("Server Error");
+    }
+  };
+  const removeWishListHandler = async (ID: string) => {
+    try {
+      if (!user?.email) {
+        toast.error("Need to Login to Create a Book");
+        return;
+      }
+      const bookData = {
+        book: ID,
+      };
+
+      removeWishList({ token: token, data: bookData })
+        .unwrap()
+        .then(() => {
+          toast.success("Book list removed successfully");
+        })
+        .catch((error: { data: { message?: string } }) => {
+          toast.error(error.data.message || "Server Error");
+        });
+    } catch (error) {
+      toast.error("Server Error");
+    }
+  };
+
+  const createReadListHandler = async (ID: string) => {
+    try {
+      if (!user?.email) {
+        toast.error("Need to Login to Create a Book");
+        return;
+      }
+      const bookData = {
+        book: ID,
+      };
+
+      createReadList({ token: token, data: bookData })
+        .unwrap()
+        .then(() => {
+          toast.success("Added to reading list");
+        })
+        .catch((error: { data: { message?: string } }) => {
+          toast.error(error.data.message || "Server Error");
+        });
+    } catch (error) {
+      toast.error("Server Error");
+    }
+  };
+
+  const removeReadListHandler = async (ID: string) => {
+    try {
+      if (!user?.email) {
+        toast.error("Need to Login to Create a Book");
+        return;
+      }
+      const bookData = {
+        book: ID,
+      };
+
+      removeReadList({ token: token, data: bookData })
+        .unwrap()
+        .then(() => {
+          toast.success("Cleaned from reading list");
+        })
+        .catch((error: { data: { message?: string } }) => {
+          toast.error(error.data.message || "Server Error");
+        });
+    } catch (error) {
+      toast.error("Server Error");
+    }
+  };
+
+  const updateReadListHandler = async (ID: string, isFinished: boolean) => {
+    try {
+      if (!user?.email) {
+        toast.error("Need to Login to Create a Book");
+        return;
+      }
+      const bookData = {
+        book: ID,
+        isFinished: isFinished,
+      };
+
+      updateReadList({ token: token, data: bookData })
+        .unwrap()
+        .then(() => {
+          toast.success("Reading list status updated");
+        })
+        .catch((error: { data: { message?: string } }) => {
+          toast.error(error.data.message || "Server Error");
+        });
+    } catch (error) {
+      toast.error("Server Error");
+    }
+  };
+
   return (
     <div
       className={`relative h-full grid content-between px-6 !pt-5 pb-6 border-gray bg-white border border-solid transition-all rounded-md group hover:!border-themePrimary`}
@@ -70,23 +218,63 @@ const BookDetailsCard = ({ data }: BookCardProps) => {
         </span>
       )} */}
 
-      {listed ? (
+      {wishlistSelected ? (
         <button
           onClick={() => {
-            console.log("remove list");
+            void removeWishListHandler(data._id);
           }}
-          className="left-3 top-3 py-1 px-2.5 text-red-400 rounded-sm text-lg absolute flex flex-wrap gap-2"
+          className="left-3 top-3 py-1 px-2.5 text-green-500 rounded-sm text-lg absolute flex flex-wrap gap-2"
         >
           <AiFillHeart />
         </button>
       ) : (
         <button
           onClick={() => {
-            console.log("list");
+            void createWishListHandler(data._id);
           }}
-          className="left-3 top-3 py-1 px-2.5 text-red-400 rounded-sm text-lg absolute flex flex-wrap gap-2"
+          className="left-3 top-3 py-1 px-2.5  opacity-40 text-red-400 rounded-sm text-lg absolute flex flex-wrap gap-2"
         >
           <AiOutlineHeart />
+        </button>
+      )}
+      {readListSelected ? (
+        <>
+          <button
+            onClick={() => {
+              void removeReadListHandler(data._id);
+            }}
+            className="left-3 top-14 py-1 px-2.5 text-green-500 rounded-sm text-lg absolute flex flex-wrap gap-2"
+          >
+            <AiFillRead />
+          </button>
+          {readListSelected.isFinished ? (
+            <button
+              onClick={() => {
+                void updateReadListHandler(data._id, false);
+              }}
+              className="left-3 top-20 py-1 px-2.5 text-green-500 rounded-sm text-lg absolute flex flex-wrap gap-2"
+            >
+              <TiTick />
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                void updateReadListHandler(data._id, true);
+              }}
+              className="left-3 top-20 py-1 px-2.5  opacity-30 text-red-400 rounded-sm text-lg absolute flex flex-wrap gap-2"
+            >
+              <TiTickOutline />
+            </button>
+          )}
+        </>
+      ) : (
+        <button
+          onClick={() => {
+            void createReadListHandler(data._id);
+          }}
+          className="left-3 top-14 py-1 px-2.5 opacity-40 text-red-400 rounded-sm text-lg absolute flex flex-wrap gap-2"
+        >
+          <AiOutlineRead />
         </button>
       )}
 

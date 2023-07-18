@@ -5,6 +5,16 @@ export interface IUser {
     firstName: string;
     lastName: string;
   };
+  readList?: IReadList[];
+  wishlist?: IWishList[];
+}
+
+export interface IReadList {
+  book: string;
+  isFinished: boolean;
+}
+export interface IWishList {
+  book: string;
 }
 
 export interface ISignupCredential {

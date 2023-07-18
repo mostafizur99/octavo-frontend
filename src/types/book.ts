@@ -31,3 +31,11 @@ export interface IBookInputs {
   price: string;
   publicationYear: string;
 }
+
+export interface IWishListInputs {
+  book: string;
+}
+export interface IReadListInputs {
+  book: string;
+  isFinished?: boolean;
+}

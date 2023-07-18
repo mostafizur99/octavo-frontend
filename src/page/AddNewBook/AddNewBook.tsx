@@ -12,7 +12,6 @@ const AddNewBook = () => {
   const { user } = useAppSelector((state) => state.user);
   const [createBook, { isLoading }] = useCreateBookMutation();
   const token = getToken();
-  console.log("token", token);
 
   const navigate = useNavigate();
 

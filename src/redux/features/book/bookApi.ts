@@ -1,4 +1,9 @@
-import { IBookInputs, IReviewInputs } from "../../../types/book";
+import {
+  IBookInputs,
+  IReadListInputs,
+  IReviewInputs,
+  IWishListInputs,
+} from "../../../types/book";
 import { api } from "../../api/apiSlice";
 
 const bookApi = api.injectEndpoints({
@@ -77,6 +82,91 @@ const bookApi = api.injectEndpoints({
       }),
       invalidatesTags: ["reviews"],
     }),
+    createWishList: builder.mutation({
+      query: ({
+        data,
+        token,
+      }: {
+        data: IWishListInputs;
+        token: string | null;
+      }) => ({
+        url: `/users/wishlist`,
+        method: "POST",
+        headers: {
+          authorization: token ? token : "",
+        },
+        body: data,
+      }),
+      invalidatesTags: ["reviews"],
+    }),
+    removeWishList: builder.mutation({
+      query: ({
+        data,
+        token,
+      }: {
+        data: IWishListInputs;
+        token: string | null;
+      }) => ({
+        url: `/users/wishlist`,
+        method: "PATCH",
+        headers: {
+          authorization: token ? token : "",
+        },
+        body: data,
+      }),
+      invalidatesTags: ["reviews"],
+    }),
+    createReadList: builder.mutation({
+      query: ({
+        data,
+        token,
+      }: {
+        data: IReadListInputs;
+        token: string | null;
+      }) => ({
+        url: `/users/read-list`,
+        method: "POST",
+        headers: {
+          authorization: token ? token : "",
+        },
+        body: data,
+      }),
+      invalidatesTags: ["reviews"],
+    }),
+    removeReadList: builder.mutation({
+      query: ({
+        data,
+        token,
+      }: {
+        data: IReadListInputs;
+        token: string | null;
+      }) => ({
+        url: `/users/read-list`,
+        method: "PATCH",
+        headers: {
+          authorization: token ? token : "",
+        },
+        body: data,
+      }),
+      invalidatesTags: ["reviews"],
+    }),
+    updateReadList: builder.mutation({
+      query: ({
+        data,
+        token,
+      }: {
+        data: IReadListInputs;
+        token: string | null;
+      }) => ({
+        url: `/users/read-list`,
+        method: "PUT",
+        headers: {
+          authorization: token ? token : "",
+        },
+        body: data,
+      }),
+      invalidatesTags: ["reviews"],
+    }),
   }),
 });
 
@@ -87,4 +177,9 @@ export const {
   useReviewBookMutation,
   useCreateBookMutation,
   useUpdateBookMutation,
+  useCreateWishListMutation,
+  useRemoveWishListMutation,
+  useCreateReadListMutation,
+  useRemoveReadListMutation,
+  useUpdateReadListMutation,
 } = bookApi;
