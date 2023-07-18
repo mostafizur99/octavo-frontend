@@ -18,3 +18,8 @@ export interface IReview {
     };
   };
 }
+
+export interface IReviewInputs {
+  rating: string;
+  comment: string;
+}

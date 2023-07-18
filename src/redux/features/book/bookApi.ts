@@ -1,3 +1,4 @@
+import { IReviewInputs } from "../../../types/book";
 import { api } from "../../api/apiSlice";
 
 const bookApi = api.injectEndpoints({
@@ -9,6 +10,7 @@ const bookApi = api.injectEndpoints({
     }),
     singleBook: builder.query({
       query: (id: string) => `/books/${id}`,
+      providesTags: ["reviews"],
     }),
     deleteBook: builder.mutation({
       query: ({ id, token }: { id: string; token: string | null }) => ({
@@ -20,16 +22,31 @@ const bookApi = api.injectEndpoints({
       }),
       invalidatesTags: ["books"],
     }),
-    // postReview: builder.mutation({
-    //   query: ({ id, data }: {id:string}) => ({
-    //     url: `/review/${id}`,
-    //     method: "POST",
-    //     body: data,
-    //   }),
-    //   invalidatesTags: ["reviews"],
-    // }),
+    reviewBook: builder.mutation({
+      query: ({
+        id,
+        data,
+        token,
+      }: {
+        id: string;
+        token: string | null;
+        data: IReviewInputs;
+      }) => ({
+        url: `/books/review/${id}`,
+        method: "PATCH",
+        headers: {
+          authorization: token ? token : "",
+        },
+        body: data,
+      }),
+      invalidatesTags: ["reviews"],
+    }),
   }),
 });
 
-export const { useGetBooksQuery, useSingleBookQuery, useDeleteBookMutation } =
-  bookApi;
+export const {
+  useGetBooksQuery,
+  useSingleBookQuery,
+  useDeleteBookMutation,
+  useReviewBookMutation,
+} = bookApi;

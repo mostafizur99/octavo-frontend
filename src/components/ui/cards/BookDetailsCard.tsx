@@ -1,29 +1,36 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import logoImg from "../../../assets/images/logo/logo-main.png";
-import { IBook, IReview } from "../../../types/book";
+import { IBook } from "../../../types/book";
 import { TfiUser } from "react-icons/tfi";
 import { TbCategory2 } from "react-icons/tb";
 import { RiPriceTag3Line, RiTimeLine } from "react-icons/ri";
-import userAvatar from "../../../assets/images/avatar.jpg";
 import Swal from "sweetalert2";
 import { useDeleteBookMutation } from "../../../redux/features/book/bookApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../../../utils/userAuth";
+import BookReviews from "../reviews/BookReviews";
+import { useAppSelector } from "../../../redux/hooks";
 
 type BookCardProps = {
   data: IBook;
 };
 
 const BookDetailsCard = ({ data }: BookCardProps) => {
+  const { user } = useAppSelector((state) => state.user);
+
   const navigate = useNavigate();
   const [deleteBook] = useDeleteBookMutation();
 
   const token = getToken();
-  console.log("token", token);
 
   const deleteHandler = async (ID: string) => {
     try {
+      if (!user?.email) {
+        toast.error("Need to Login to delete Book");
+        return;
+      }
+
       const result = await Swal.fire({
         title: "Are you sure to delete?",
         icon: "error",
@@ -34,7 +41,6 @@ const BookDetailsCard = ({ data }: BookCardProps) => {
       });
 
       if (result.isConfirmed) {
-        console.log("Yes, delete it");
         deleteBook({ id: ID, token: token })
           .unwrap()
           .then(() => {
@@ -44,12 +50,12 @@ const BookDetailsCard = ({ data }: BookCardProps) => {
           .catch((error: { data: { message?: string } }) => {
             toast.error(error.data.message || "Server Error");
           });
-        console.log("Yes, delete it");
       }
     } catch (error) {
       toast.error("Server Error");
     }
   };
+
   return (
     <div
       className={`relative h-full grid content-between px-6 !pt-5 pb-6 border-gray bg-white border border-solid transition-all rounded-md group hover:!border-themePrimary`}
@@ -104,39 +110,8 @@ const BookDetailsCard = ({ data }: BookCardProps) => {
             </div>
           </li>
         </ul>
-        <div className="pt-2">
-          <h3 className="text-xs  text-themeSecondary">
-            Reviews ({data && data?.reviews.length})
-          </h3>
-          <div className="pt-5">
-            {data && data?.reviews.length < 1 && (
-              <div className=" border-t pt-2">
-                <p className="text-xss  text-themeLight">No Review Yet</p>
-              </div>
-            )}
-            {data &&
-              data?.reviews.length > 0 &&
-              data?.reviews.map((reviewItem: IReview, index: number) => (
-                <div key={index} className=" border-t pt-2 pb-5">
-                  <div className="flex items-center gap-3">
-                    <div className="h-8 w-8">
-                      <img
-                        src={userAvatar}
-                        alt="user"
-                        className="h-full w-full"
-                      />
-                    </div>
-                    <p className="text-xs  text-themeLight">
-                      {reviewItem.comment} ({reviewItem.rating})
-                    </p>
-                  </div>
-                  <h4 className="text-xss  text-themeLight">
-                    {reviewItem.reviewer.name.firstName || ""}
-                  </h4>
-                </div>
-              ))}
-          </div>
-        </div>
+        {/* Review Section  */}
+        <BookReviews data={data} />
       </div>
     </div>
   );

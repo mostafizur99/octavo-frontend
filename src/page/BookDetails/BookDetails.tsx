@@ -11,7 +11,6 @@ const BookDetails = () => {
   const { data, isLoading } = useSingleBookQuery(id ? `${id}` : "");
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const singleBookData: IBook = data?.data;
-  console.log("singleBookData", singleBookData);
 
   return (
     <div className="container mx-auto py-10 md:py-32 px-5 md:px-0">
