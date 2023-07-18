@@ -18,9 +18,7 @@ const Home = () => {
   }, [dispatch, token]);
 
   //==============get recent 10 books data==============
-  const { data, isLoading, error } = useGetBooksQuery(
-    "limit=10&sortOrder=desc"
-  );
+  const { data, isLoading } = useGetBooksQuery("limit=10&sortOrder=desc");
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const BookData: IBook[] = data?.data || [];
 

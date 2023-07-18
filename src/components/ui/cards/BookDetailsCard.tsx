@@ -4,6 +4,7 @@ import { IBook } from "../../../types/book";
 import { TfiUser } from "react-icons/tfi";
 import { TbCategory2 } from "react-icons/tb";
 import { RiPriceTag3Line, RiTimeLine } from "react-icons/ri";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import Swal from "sweetalert2";
 import { useDeleteBookMutation } from "../../../redux/features/book/bookApi";
 import { toast } from "react-toastify";
@@ -18,6 +19,7 @@ type BookCardProps = {
 
 const BookDetailsCard = ({ data }: BookCardProps) => {
   const { user } = useAppSelector((state) => state.user);
+  const listed = false;
 
   const navigate = useNavigate();
   const [deleteBook] = useDeleteBookMutation();
@@ -60,13 +62,34 @@ const BookDetailsCard = ({ data }: BookCardProps) => {
     <div
       className={`relative h-full grid content-between px-6 !pt-5 pb-6 border-gray bg-white border border-solid transition-all rounded-md group hover:!border-themePrimary`}
     >
-      {data.isFeatured && (
+      {/* {data.isFeatured && (
         <span className="absolute left-3 top-3 flex flex-wrap gap-2">
           <span className="bg-red-50 py-1 px-2.5 rounded-sm text-xss1 font-normal text-red-400">
             Best Choice
           </span>
         </span>
+      )} */}
+
+      {listed ? (
+        <button
+          onClick={() => {
+            console.log("remove list");
+          }}
+          className="left-3 top-3 py-1 px-2.5 text-red-400 rounded-sm text-lg absolute flex flex-wrap gap-2"
+        >
+          <AiFillHeart />
+        </button>
+      ) : (
+        <button
+          onClick={() => {
+            console.log("list");
+          }}
+          className="left-3 top-3 py-1 px-2.5 text-red-400 rounded-sm text-lg absolute flex flex-wrap gap-2"
+        >
+          <AiOutlineHeart />
+        </button>
       )}
+
       <Link
         to={`/edit-book/${data?._id}`}
         className=" right-3 top-3 py-1 px-8 text-white bg-themeDarker rounded-sm text-xss1 absolute flex flex-wrap gap-2"
