@@ -23,3 +23,11 @@ export interface IReviewInputs {
   rating: string;
   comment: string;
 }
+
+export interface IBookInputs {
+  title: string;
+  author: string;
+  genre: string;
+  price: string;
+  publicationYear: string;
+}

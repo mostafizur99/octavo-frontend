@@ -1,19 +1,18 @@
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppSelector } from "../../redux/hooks";
-
-type IBookInputs = {
-  title: string;
-  author: string;
-  genre: string;
-  published: string;
-};
+import { IBookInputs } from "../../types/book";
+import { useCreateBookMutation } from "../../redux/features/book/bookApi";
+import { getToken } from "../../utils/userAuth";
 
 const AddNewBook = () => {
-  const { user, isLoading } = useAppSelector((state) => state.user);
+  const { user } = useAppSelector((state) => state.user);
+  const [createBook, { isLoading }] = useCreateBookMutation();
+  const token = getToken();
+  console.log("token", token);
 
   const navigate = useNavigate();
 
@@ -21,20 +20,33 @@ const AddNewBook = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<IBookInputs>();
 
-  const onSubmitHandler: SubmitHandler<IBookInputs> = async (data) => {
+  const onSubmitHandler: SubmitHandler<IBookInputs> = async (fromData) => {
     try {
-      // const loginData = await loginUserAtDb({
-      //   email: data.email,
-      //   password: data.password,
-      // });
+      if (!user?.email) {
+        toast.error("Need to Login to Create a Book");
+        return;
+      }
+      const bookData = {
+        title: fromData.title,
+        author: fromData.author,
+        genre: fromData.genre,
+        price: fromData.price,
+        publicationYear: fromData.publicationYear,
+      };
 
-      console.log("user, isLoading", user, isLoading, data);
-      toast.success("Book uploaded successfully");
-      navigate("/");
-      reset();
+      createBook({ token: token, data: bookData })
+        .unwrap()
+        .then(() => {
+          toast.success("Book created successfully");
+          navigate("/books");
+          reset();
+        })
+        .catch((error: { data: { message?: string } }) => {
+          toast.error(error.data.message || "Server Error");
+        });
     } catch (error) {
       toast.error("Server Error");
     }
@@ -119,24 +131,48 @@ const AddNewBook = () => {
                 </span>
               )}
             </div>
-            {/* published  */}
+            {/* publicationYear  */}
             <div className="mb-4">
               <label
                 className="block mb-2 text-themeDarker font-normal"
-                htmlFor="published"
+                htmlFor="publicationYear"
               >
-                Published Date
+                publication Year
               </label>
               <input
-                id="published"
+                id="publicationYear"
                 className={`appearance-none block w-full !p-3 leading-5 text-themeDarker border ${
-                  errors?.published ? "!border-red-500" : "border-gray"
+                  errors?.publicationYear ? "!border-red-500" : "border-gray"
                 } placeholder:font-normal placeholder:text-xss1 rounded-lg placeholder-themeDarkAlt focus:outline-none `}
                 type="text"
-                {...register("published", { required: true })}
-                placeholder="Enter Your Published"
+                {...register("publicationYear", { required: true })}
+                placeholder="Enter Your Publication Year"
               />
-              {errors?.published && (
+              {errors?.publicationYear && (
+                <span className="text-red-500 text-xss italic">
+                  This field is required
+                </span>
+              )}
+            </div>
+            {/* price  */}
+            <div className="mb-4">
+              <label
+                className="block mb-2 text-themeDarker font-normal"
+                htmlFor="price"
+              >
+                Price
+              </label>
+              <input
+                id="price"
+                className={`appearance-none block w-full !p-3 leading-5 text-themeDarker border ${
+                  errors?.price ? "!border-red-500" : "border-gray"
+                } placeholder:font-normal placeholder:text-xss1 rounded-lg placeholder-themeDarkAlt focus:outline-none `}
+                type="number"
+                min={0}
+                {...register("price", { required: true })}
+                placeholder="Enter Price"
+              />
+              {errors?.price && (
                 <span className="text-red-500 text-xss italic">
                   This field is required
                 </span>
@@ -144,12 +180,12 @@ const AddNewBook = () => {
             </div>
             <button
               className={`!py-3 px-7 flex gap-2 justify-center items-center transition-all duration-300 ease-in-out mb-6 w-full text-base text-white font-normal text-center leading-6 ${
-                isSubmitting ? "bg-themeLighter" : "bg-themePrimary"
+                isLoading ? "bg-themeLighter" : "bg-themePrimary"
               } rounded-md hover:bg-themeDarker`}
               type="submit"
-              disabled={isSubmitting}
+              disabled={isLoading}
             >
-              {isSubmitting ? "Please wait..." : "Add"}
+              {isLoading ? "Please wait..." : "Add"}
             </button>
           </form>
         </div>
